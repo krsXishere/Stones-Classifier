@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stones_classifier/common/constant.dart';
 import 'package:stones_classifier/providers/camera_provider.dart';
+import 'package:stones_classifier/providers/classify_stones_provider.dart';
+import 'package:stones_classifier/widgets/modal_bottom_sheet_widget.dart';
 
 class ClassifyPage extends StatelessWidget {
   const ClassifyPage({super.key});
@@ -16,6 +18,37 @@ class ClassifyPage extends StatelessWidget {
       ).initCamera();
     });
 
+    showClassifyModal(String predictedClass) {
+      showModal(
+        context,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(
+              child: Text(
+                "Klasifikasi Berhasil",
+                style: secondaryTextStyle,
+              ),
+            ),
+            SizedBox(
+              height: defaultPadding,
+            ),
+            Center(
+              child: Text(
+                predictedClass,
+                style: secondaryTextStyle.copyWith(
+                  fontWeight: semiBold,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: height(context) * 0.3,
+            ),
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: white,
       body: SafeArea(
@@ -27,7 +60,7 @@ class ClassifyPage extends StatelessWidget {
                 child: Text(
                   "STONES CLASSIFIER",
                   style: primaryTextStyle.copyWith(
-                    fontSize: 35,
+                    fontSize: 30,
                     color: primaryColor,
                     fontWeight: extraBold,
                   ),
@@ -60,11 +93,22 @@ class ClassifyPage extends StatelessWidget {
               SizedBox(
                 height: defaultPadding,
               ),
-              Consumer<CameraProvider>(
-                builder: (context, cameraProvider, child) {
+              Consumer2<CameraProvider, ClassifyStonesProvider>(
+                builder:
+                    (context, cameraProvider, classifyStonesProvider, child) {
                   return GestureDetector(
-                    onTap: () {
-                      cameraProvider.takePicture();
+                    onTap: () async {
+                      // showClassifyModal("Test");
+                      final image = await cameraProvider.takePicture();
+                      if (image != null) {
+                        await classifyStonesProvider.classify(image);
+
+                        if (classifyStonesProvider.classifyStonesModel !=
+                            null) {
+                          showClassifyModal(classifyStonesProvider
+                              .classifyStonesModel!.predictedClass!);
+                        }
+                      }
                     },
                     child: Container(
                       height: 70,

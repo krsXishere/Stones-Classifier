@@ -31,7 +31,7 @@ class _SignInPageState extends State<SignInPage> {
                     child: Text(
                       "STONES CLASSIFIER",
                       style: primaryTextStyle.copyWith(
-                        fontSize: 35,
+                        fontSize: 30,
                         color: primaryColor,
                         fontWeight: extraBold,
                       ),

@@ -12,7 +12,7 @@ class CameraProvider with ChangeNotifier {
   void initCamera() {
     _cameraController = CameraController(
       cameras[0],
-      ResolutionPreset.max,
+      ResolutionPreset.low,
     );
     if (_cameraController != null) {
       _cameraController!.initialize().then((_) {

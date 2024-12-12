@@ -39,7 +39,7 @@ class _ProfilePageState extends State<ProfilePage>
                 child: Text(
                   "STONES CLASSIFIER",
                   style: primaryTextStyle.copyWith(
-                    fontSize: 35,
+                    fontSize: 30,
                     color: primaryColor,
                     fontWeight: extraBold,
                   ),
@@ -54,7 +54,8 @@ class _ProfilePageState extends State<ProfilePage>
                     height: 70,
                     width: 70,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(defaultBorderRadius),
+                        borderRadius:
+                            BorderRadius.circular(defaultBorderRadius),
                         border: Border.all(),
                         color: Colors.transparent),
                     child: Icon(
@@ -132,7 +133,7 @@ class _ProfilePageState extends State<ProfilePage>
                 height: defaultPadding,
               ),
               SizedBox(
-                height: height(context) * 0.5,
+                height: height(context) * 0.4,
                 child: TabBarView(
                   controller: _tabController,
                   children: const [
