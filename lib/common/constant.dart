@@ -5,7 +5,7 @@ double defaultPadding = 20;
 double defaultBorderRadius = 15;
 
 String baseAPIURL() {
-  return "http://192.168.100.168:3001";
+  return "http://52.231.109.150:3001";
 }
 // String baseAPIURL() {
 //   return "https://pengaduan-masyarakat.byraq-tech.com/api";

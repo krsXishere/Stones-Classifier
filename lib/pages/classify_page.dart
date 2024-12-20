@@ -5,6 +5,7 @@ import 'package:stones_classifier/common/constant.dart';
 import 'package:stones_classifier/providers/camera_provider.dart';
 import 'package:stones_classifier/providers/classify_stones_provider.dart';
 import 'package:stones_classifier/widgets/modal_bottom_sheet_widget.dart';
+import 'package:stones_classifier/widgets/snackbar_widget.dart';
 
 class ClassifyPage extends StatelessWidget {
   const ClassifyPage({super.key});
@@ -47,6 +48,13 @@ class ClassifyPage extends StatelessWidget {
           ],
         ),
       );
+    }
+
+    guardedSnackbar(
+      String message,
+      Color color,
+    ) {
+      showSnackBar(context, message, color);
     }
 
     return Scaffold(
@@ -107,6 +115,11 @@ class ClassifyPage extends StatelessWidget {
                             null) {
                           showClassifyModal(classifyStonesProvider
                               .classifyStonesModel!.predictedClass!);
+                        } else {
+                          guardedSnackbar(
+                            "Gagal",
+                            Colors.red,
+                          );
                         }
                       }
                     },

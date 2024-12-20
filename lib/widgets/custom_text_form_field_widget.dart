@@ -41,7 +41,7 @@ class CustomTextFormFieldWidget extends StatelessWidget {
         ? TextFormField(
             maxLines: expands ? 5 : 1,
             maxLength: expands ? 500 : null,
-            style: primaryTextStyle.copyWith(
+            style: secondaryTextStyle.copyWith(
               fontSize: 14,
             ),
             cursorColor: primaryColor,
@@ -57,7 +57,7 @@ class CustomTextFormFieldWidget extends StatelessWidget {
               fillColor: white,
               border: InputBorder.none,
               hintText: hintText,
-              hintStyle: primaryTextStyle.copyWith(
+              hintStyle: secondaryTextStyle.copyWith(
                 fontStyle: isItalicHint ? FontStyle.italic : FontStyle.normal,
                 fontWeight: regular,
                 color: grey400,
@@ -78,7 +78,7 @@ class CustomTextFormFieldWidget extends StatelessWidget {
             ),
           )
         : TextFormField(
-            style: primaryTextStyle.copyWith(
+            style: secondaryTextStyle.copyWith(
               fontSize: 14,
             ),
             cursorColor: primaryColor,
@@ -101,7 +101,7 @@ class CustomTextFormFieldWidget extends StatelessWidget {
               fillColor: white,
               border: InputBorder.none,
               hintText: hintText,
-              hintStyle: primaryTextStyle.copyWith(
+              hintStyle: secondaryTextStyle.copyWith(
                 fontWeight: regular,
                 color: grey400,
                 fontSize: 12,
