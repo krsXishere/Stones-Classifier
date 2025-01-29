@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:stones_classifier/pages/sign_in_page.dart';
+import 'package:stones_classifier/providers/authentication_provider.dart';
 import 'package:stones_classifier/providers/bottom_navigation_bar_provider.dart';
 import 'package:stones_classifier/providers/camera_provider.dart';
 import 'package:stones_classifier/providers/classify_stones_provider.dart';
@@ -35,6 +36,9 @@ class StoneClassifier extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ClassifyStonesProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AuthenticationProvider(),
         ),
       ],
       child: Builder(builder: (context) {

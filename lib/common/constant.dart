@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 double defaultPadding = 20;
 double defaultBorderRadius = 15;
 
-String baseAPIURL() {
-  return "http://52.231.109.150:3001";
+String apiUrl() {
+  return "http://192.168.1.4:5050";
+}
+
+String baseApiUrl() {
+  return "${apiUrl()}/api";
 }
 // String baseAPIURL() {
 //   return "https://pengaduan-masyarakat.byraq-tech.com/api";
@@ -26,6 +31,12 @@ Map<String, String> header(
     };
   }
 }
+
+const storage = FlutterSecureStorage(
+  aOptions: AndroidOptions(
+    encryptedSharedPreferences: true,
+  ),
+);
 
 double height(BuildContext context) {
   return MediaQuery.of(context).size.height;

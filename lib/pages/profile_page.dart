@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:stones_classifier/common/constant.dart';
 import 'package:stones_classifier/pages/stone_collection_page.dart';
 import 'package:stones_classifier/pages/stone_history_page.dart';
-import 'package:stones_classifier/widgets/custom_text_form_field_widget.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -90,14 +89,14 @@ class _ProfilePageState extends State<ProfilePage>
               SizedBox(
                 height: defaultPadding,
               ),
-              CustomTextFormFieldWidget(
-                hintText: "Cari...",
-                isPasswordField: false,
-                isItalicHint: true,
-                controller: searchController,
-                type: TextInputType.text,
-                onTap: () {},
-              ),
+              // CustomTextFormFieldWidget(
+              //   hintText: "Cari...",
+              //   isPasswordField: false,
+              //   isItalicHint: true,
+              //   controller: searchController,
+              //   type: TextInputType.text,
+              //   onTap: () {},
+              // ),
               SizedBox(
                 height: defaultPadding,
               ),

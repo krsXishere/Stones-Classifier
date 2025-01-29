@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:stones_classifier/common/constant.dart';
+import 'package:stones_classifier/providers/authentication_provider.dart';
 import 'package:stones_classifier/widgets/bottom_navigation_bar_widget.dart';
 import 'package:stones_classifier/widgets/custom_button_widget.dart';
 import 'package:stones_classifier/widgets/custom_text_form_field_widget.dart';
+import 'package:stones_classifier/widgets/snackbar_widget.dart';
+import '../common/exceptions/app_exception.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -15,6 +19,87 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  void navigate() {
+    Navigator.of(context).pushAndRemoveUntil(
+      PageTransition(
+        child: const BottomNavigationBarWidget(),
+        type: PageTransitionType.rightToLeft,
+      ),
+      (Route<dynamic> route) => false,
+    );
+  }
+
+  guardedSnackbar(
+    String message,
+    Color color,
+  ) {
+    showSnackBar(
+      context,
+      message,
+      color,
+    );
+  }
+
+  void signIn(
+    AuthenticationProvider authenticationProvider,
+    String email,
+    String password,
+  ) async {
+    try {
+      if (email.isNotEmpty && password.isNotEmpty) {
+        if (await authenticationProvider.signIn(
+          email,
+          password,
+        )) {
+          navigate();
+        } else {
+          guardedSnackbar(
+            "${authenticationProvider.authenticationModel?.genericResponseModel?.metadata?.message}",
+            Colors.red,
+          );
+        }
+      } else {
+        guardedSnackbar(
+          "Isi semua data.",
+          Colors.red,
+        );
+      }
+    } on AppException catch (e) {
+      guardedSnackbar(
+        e.message,
+        Colors.red,
+      );
+    } catch (e) {
+      guardedSnackbar(
+        "$e",
+        Colors.red,
+      );
+    }
+  }
+
+  void signInWithGoogle(AuthenticationProvider authenticationProvider) async {
+    try {
+      if (await authenticationProvider.signInWithGoogle()) {
+        navigate();
+      } else {
+        guardedSnackbar(
+          "${authenticationProvider.authenticationModel?.genericResponseModel?.metadata?.message}",
+          Colors.red,
+        );
+      }
+    } on AppException catch (e) {
+      guardedSnackbar(
+        e.message,
+        Colors.red,
+      );
+    } catch (e) {
+      guardedSnackbar(
+        "$e",
+        Colors.red,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,33 +164,39 @@ class _SignInPageState extends State<SignInPage> {
                       SizedBox(
                         height: defaultPadding,
                       ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          fixedSize: const Size(double.maxFinite, 50),
-                          side: BorderSide(color: black1),
-                          backgroundColor: white,
-                        ),
-                        onPressed: () {},
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 25,
-                              width: 25,
-                              child: Image.asset(
-                                "assets/png/google.png",
-                                fit: BoxFit.cover,
-                              ),
+                      Consumer<AuthenticationProvider>(
+                        builder: (context, authenticationProvider, child) {
+                          return ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              fixedSize: const Size(double.maxFinite, 50),
+                              side: BorderSide(color: black1),
+                              backgroundColor: white,
                             ),
-                            SizedBox(
-                              width: defaultPadding,
+                            onPressed: () {
+                              signInWithGoogle(authenticationProvider);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  height: 25,
+                                  width: 25,
+                                  child: Image.asset(
+                                    "assets/png/google.png",
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: defaultPadding,
+                                ),
+                                Text(
+                                  "Masuk melalui Google",
+                                  style: secondaryTextStyle,
+                                ),
+                              ],
                             ),
-                            Text(
-                              "Masuk melalui Google",
-                              style: secondaryTextStyle,
-                            ),
-                          ],
-                        ),
+                          );
+                        },
                       ),
                       SizedBox(
                         height: defaultPadding,
@@ -143,37 +234,43 @@ class _SignInPageState extends State<SignInPage> {
                         height: defaultPadding,
                       ),
                       CustomTextFormFieldWidget(
-                        hintText: "Email",
-                        isPasswordField: false,
-                        isFilled: true,
+                        hintText: "Alamat email",
                         controller: emailController,
-                        type: TextInputType.emailAddress,
-                        onTap: () {},
-                      ),
-                      SizedBox(
-                        height: defaultPadding,
-                      ),
-                      CustomTextFormFieldWidget(
-                        hintText: "Kata Sandi",
-                        isPasswordField: true,
                         isFilled: true,
-                        controller: passwordController,
-                        type: TextInputType.text,
-                        onTap: () {},
                       ),
                       SizedBox(
                         height: defaultPadding,
                       ),
-                      CustomButtonWidget(
-                        text: "Masuk",
-                        color: primaryColor,
-                        isLoading: false,
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            PageTransition(
-                              child: const BottomNavigationBarWidget(),
-                              type: PageTransitionType.rightToLeft,
-                            ),
+                      Consumer<AuthenticationProvider>(
+                        builder: (context, authenticationProvider, child) {
+                          return CustomTextFormFieldWidget(
+                            hintText: "Kata sandi",
+                            controller: passwordController,
+                            isPasswordField: true,
+                            isFilled: true,
+                            isObscureText: authenticationProvider.isObscureText,
+                            setObscureText: () {
+                              authenticationProvider.setObscureText();
+                            },
+                          );
+                        },
+                      ),
+                      SizedBox(
+                        height: defaultPadding,
+                      ),
+                      Consumer<AuthenticationProvider>(
+                        builder: (context, authenticationProvider, child) {
+                          return CustomButtonWidget(
+                            text: "Masuk",
+                            color: primaryColor,
+                            isLoading: authenticationProvider.isLoading,
+                            onPressed: () {
+                              signIn(
+                                authenticationProvider,
+                                emailController.text,
+                                passwordController.text,
+                              );
+                            },
                           );
                         },
                       ),

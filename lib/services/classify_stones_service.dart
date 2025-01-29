@@ -26,7 +26,7 @@ class ClassifyStonesService {
           // Buat request Multipart
           var request = MultipartRequest(
             "POST",
-            Uri.parse("${baseAPIURL()}/classify"),
+            Uri.parse("${baseApiUrl()}/classify"),
           );
 
           request.headers.addAll({
