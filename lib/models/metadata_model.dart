@@ -1,16 +1,16 @@
-class Metadata {
+class MetadataModel {
   final int? code;
   final String? status;
   final String? message;
 
-  Metadata({
+  MetadataModel({
     required this.code,
     required this.status,
     required this.message,
   });
 
-  factory Metadata.fromJson(Map<String, dynamic> json) {
-    return Metadata(
+  factory MetadataModel.fromJson(Map<String, dynamic> json) {
+    return MetadataModel(
       code: json['code'],
       status: json['status'],
       message: json['message'],
