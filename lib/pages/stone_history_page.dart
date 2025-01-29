@@ -49,9 +49,17 @@ class StoneHistoryPage extends StatelessWidget {
                     ),
                     Text(
                       history.stoneClassModel?.stoneClass ?? "",
-                      style: primaryTextStyle.copyWith(
-                        fontSize: 18,
+                      style: primaryTextStyle,
+                    ),
+                    const Spacer(),
+                    Text(
+                      formatTime(
+                        true,
+                        date: DateTime.parse(
+                          history.createdAt.toString(),
+                        ),
                       ),
+                      style: primaryTextStyle,
                     ),
                   ],
                 ),

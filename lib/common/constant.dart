@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 double defaultPadding = 20;
 double defaultBorderRadius = 15;
@@ -29,6 +30,22 @@ Map<String, String> header(
     return {
       'Accept': 'application/json',
     };
+  }
+}
+
+String formatTime(bool isDate, {DateTime? date}) {
+  final DateFormat formatterDate = DateFormat('dd MMM yyyy', 'id');
+  final DateFormat formatterJam = DateFormat('HH.mm');
+  String formattedDate = "";
+
+  if (isDate) {
+    formattedDate = formatterDate.format(date!.add(const Duration(hours: 7)));
+
+    return formattedDate;
+  } else {
+    formattedDate = formatterJam.format(date!.add(const Duration(hours: 7)));
+
+    return formattedDate;
   }
 }
 
