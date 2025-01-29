@@ -35,6 +35,13 @@ class AuthenticationService {
 
       var jsonObject = jsonDecode(response.body);
 
+      if (response.statusCode == 200) {
+        await storage.write(key: "token", value: jsonObject['data']);
+        await storage.write(key: "email", value: email);
+      }
+
+      log(jsonObject.toString());
+
       return AuthenticationModel.fromJson(jsonObject);
     } catch (e) {
       log("Error sign in service: $e");
@@ -56,6 +63,11 @@ class AuthenticationService {
           );
 
           var jsonObject = jsonDecode(response.body);
+
+          if (response.statusCode == 200) {
+            await storage.write(key: "token", value: jsonObject['data']);
+            await storage.write(key: "email", value: result.email);
+          }
 
           log(response.toString());
 

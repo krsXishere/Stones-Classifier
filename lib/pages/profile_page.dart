@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:stones_classifier/common/constant.dart';
 import 'package:stones_classifier/pages/stone_collection_page.dart';
 import 'package:stones_classifier/pages/stone_history_page.dart';
+import 'package:stones_classifier/providers/user_provider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -27,6 +29,13 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((timestamp) {
+      Provider.of<UserProvider>(
+        context,
+        listen: false,
+      ).getProfileUser();
+    });
+
     return Scaffold(
       backgroundColor: white,
       body: SafeArea(
@@ -65,24 +74,28 @@ class _ProfilePageState extends State<ProfilePage>
                   SizedBox(
                     width: defaultPadding,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Krisna Purnama",
-                        style: secondaryTextStyle.copyWith(
-                          fontSize: 18,
-                          fontWeight: bold,
-                        ),
-                      ),
-                      Text(
-                        "Akses Gratis",
-                        style: secondaryTextStyle.copyWith(
-                          fontSize: 16,
-                          color: primaryColor,
-                        ),
-                      ),
-                    ],
+                  Consumer<UserProvider>(
+                    builder: (context, userProvider, child) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            userProvider.userModel?.data?.name,
+                            style: secondaryTextStyle.copyWith(
+                              fontSize: 18,
+                              fontWeight: bold,
+                            ),
+                          ),
+                          Text(
+                            "${userProvider.userModel?.data?.practitioner?.accessTypeId}",
+                            style: secondaryTextStyle.copyWith(
+                              fontSize: 16,
+                              color: primaryColor,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),

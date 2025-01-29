@@ -1,10 +1,9 @@
 import 'dart:developer';
-
 import '../common/exceptions/app_exception.dart';
 import 'metadata_model.dart';
 
 class GenericResponseModel<T> {
-  Metadata? metadata;
+  MetadataModel? metadata;
   T? data;
 
   GenericResponseModel({
@@ -18,7 +17,7 @@ class GenericResponseModel<T> {
   ) {
     try {
       return GenericResponseModel(
-        metadata: Metadata.fromJson(json['metadata']),
+        metadata: MetadataModel.fromJson(json['metadata']),
         data: fromJsonT(json['data']),
       );
     } catch (e) {

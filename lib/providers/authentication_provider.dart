@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:stones_classifier/models/authentication_model.dart';
 import 'package:stones_classifier/services/authentication_service.dart';
-
 import '../common/exceptions/app_exception.dart';
 
 class AuthenticationProvider with ChangeNotifier {
