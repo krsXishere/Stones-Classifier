@@ -6,6 +6,7 @@ import 'package:stones_classifier/pages/stone_history_page.dart';
 import 'package:stones_classifier/providers/collection_provider.dart';
 import 'package:stones_classifier/providers/history_provider.dart';
 import 'package:stones_classifier/providers/user_provider.dart';
+import 'package:stones_classifier/widgets/custom_text_form_field_widget.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -107,8 +108,8 @@ class _ProfilePageState extends State<ProfilePage>
                             ),
                           ),
                           Text(
-                            userProvider
-                                    .userModel?.data?.practitioner?.accessTypeId
+                            userProvider.userModel?.data?.practitioner
+                                    ?.accessTypeModel.access
                                     .toString() ??
                                 "",
                             style: secondaryTextStyle.copyWith(
@@ -125,14 +126,11 @@ class _ProfilePageState extends State<ProfilePage>
               SizedBox(
                 height: defaultPadding,
               ),
-              // CustomTextFormFieldWidget(
-              //   hintText: "Cari...",
-              //   isPasswordField: false,
-              //   isItalicHint: true,
-              //   controller: searchController,
-              //   type: TextInputType.text,
-              //   onTap: () {},
-              // ),
+              CustomTextFormFieldWidget(
+                hintText: "Cari",
+                controller: searchController,
+                isItalicHint: true,
+              ),
               SizedBox(
                 height: defaultPadding,
               ),

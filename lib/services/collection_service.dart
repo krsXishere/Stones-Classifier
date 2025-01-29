@@ -31,4 +31,6 @@ class CollectionService {
           "Terjadi kesalahan saat mengambil data. Silakan coba lagi.");
     }
   }
+
+  
 }
