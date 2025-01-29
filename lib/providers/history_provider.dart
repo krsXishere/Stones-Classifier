@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:stones_classifier/common/exceptions/app_exception.dart';
 import 'package:stones_classifier/services/history_service.dart';

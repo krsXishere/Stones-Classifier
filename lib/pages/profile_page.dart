@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:stones_classifier/common/constant.dart';
 import 'package:stones_classifier/pages/stone_collection_page.dart';
 import 'package:stones_classifier/pages/stone_history_page.dart';
+import 'package:stones_classifier/providers/collection_provider.dart';
 import 'package:stones_classifier/providers/history_provider.dart';
 import 'package:stones_classifier/providers/user_provider.dart';
 
@@ -43,6 +44,13 @@ class _ProfilePageState extends State<ProfilePage>
           context,
           listen: false,
         ).getHistory(
+          int.parse(userProvider.userModel!.data!.id.toString()),
+        );
+
+        Provider.of<CollectionProvider>(
+          context,
+          listen: false,
+        ).getCollection(
           int.parse(userProvider.userModel!.data!.id.toString()),
         );
       }
@@ -139,11 +147,15 @@ class _ProfilePageState extends State<ProfilePage>
                 dividerColor: black1,
                 tabs: [
                   Tab(
-                    child: Center(
-                      child: Text(
-                        "Koleksi\n0",
-                        textAlign: TextAlign.center,
-                      ),
+                    child: Consumer<CollectionProvider>(
+                      builder: (context, collectionProvider, child) {
+                        return Text(
+                          collectionProvider.collectionsModel?.data.isNotEmpty
+                              ? "Koleksi\n${collectionProvider.collectionsModel?.data.length}"
+                              : "Koleksi\n0",
+                          textAlign: TextAlign.center,
+                        );
+                      },
                     ),
                   ),
                   Tab(
