@@ -1,9 +1,12 @@
+import 'package:stones_classifier/models/access_type_model.dart';
+
 class PractitionerModel {
   int? id;
   String? profilePicture;
   int? accessTypeId;
   String? createdAt;
   String? updatedAt;
+  AccessTypeModel? accessTypeModel;
 
   PractitionerModel({
     this.id,
@@ -11,6 +14,7 @@ class PractitionerModel {
     this.accessTypeId,
     this.createdAt,
     this.updatedAt,
+    this.accessTypeModel,
   });
 
   factory PractitionerModel.fromJson(Map<String, dynamic> json) {
@@ -20,6 +24,9 @@ class PractitionerModel {
       accessTypeId: json['accessTypeId'],
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
+      accessTypeModel: json['accessType'] != null
+          ? AccessTypeModel.fromJson(json['accessType'])
+          : null,
     );
   }
 
