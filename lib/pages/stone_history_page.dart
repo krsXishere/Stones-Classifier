@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:stones_classifier/common/constant.dart';
+import 'package:stones_classifier/models/history_model.dart';
+import 'package:stones_classifier/providers/history_provider.dart';
 
 class StoneHistoryPage extends StatelessWidget {
   const StoneHistoryPage({super.key});
@@ -8,6 +11,55 @@ class StoneHistoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: white,
+      body: Consumer<HistoryProvider>(
+        builder: (context, historyProvider, child) {
+          return ListView.builder(
+            itemCount: historyProvider.historiesModel?.data.length ?? 0,
+            itemBuilder: (context, index) {
+              final histories =
+                  historyProvider.historiesModel?.data as List<HistoryModel>?;
+
+              if (histories == null || histories.isEmpty) {
+                return const Center(child: Text("Tidak ada data"));
+              }
+
+              final history = histories[index];
+
+              return Container(
+                padding: const EdgeInsets.all(10),
+                margin: const EdgeInsets.only(bottom: 10),
+                width: double.maxFinite,
+                decoration: BoxDecoration(
+                  color: primaryColor,
+                  borderRadius: BorderRadius.circular(defaultBorderRadius),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(defaultBorderRadius),
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      history.stoneClassModel?.stoneClass ?? "",
+                      style: primaryTextStyle.copyWith(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

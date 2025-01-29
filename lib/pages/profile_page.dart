@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:stones_classifier/common/constant.dart';
 import 'package:stones_classifier/pages/stone_collection_page.dart';
 import 'package:stones_classifier/pages/stone_history_page.dart';
+import 'package:stones_classifier/providers/history_provider.dart';
 import 'package:stones_classifier/providers/user_provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -29,11 +30,22 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((timestamp) {
-      Provider.of<UserProvider>(
+    WidgetsBinding.instance.addPostFrameCallback((timestamp) async {
+      final userProvider = Provider.of<UserProvider>(
         context,
         listen: false,
-      ).getProfileUser();
+      );
+
+      await userProvider.getProfileUser();
+
+      if (context.mounted && userProvider.userModel?.data != null) {
+        Provider.of<HistoryProvider>(
+          context,
+          listen: false,
+        ).getHistory(
+          int.parse(userProvider.userModel!.data!.id.toString()),
+        );
+      }
     });
 
     return Scaffold(
@@ -80,14 +92,17 @@ class _ProfilePageState extends State<ProfilePage>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            userProvider.userModel?.data?.name,
+                            userProvider.userModel?.data?.name ?? "",
                             style: secondaryTextStyle.copyWith(
                               fontSize: 18,
                               fontWeight: bold,
                             ),
                           ),
                           Text(
-                            "${userProvider.userModel?.data?.practitioner?.accessTypeId}",
+                            userProvider
+                                    .userModel?.data?.practitioner?.accessTypeId
+                                    .toString() ??
+                                "",
                             style: secondaryTextStyle.copyWith(
                               fontSize: 16,
                               color: primaryColor,
@@ -122,7 +137,7 @@ class _ProfilePageState extends State<ProfilePage>
                   primaryColor.withOpacity(0.2),
                 ),
                 dividerColor: black1,
-                tabs: const [
+                tabs: [
                   Tab(
                     child: Center(
                       child: Text(
@@ -133,9 +148,13 @@ class _ProfilePageState extends State<ProfilePage>
                   ),
                   Tab(
                     child: Center(
-                      child: Text(
-                        "Riwayat\n0",
-                        textAlign: TextAlign.center,
+                      child: Consumer<HistoryProvider>(
+                        builder: (context, historyProvider, child) {
+                          return Text(
+                            "Riwayat\n${historyProvider.historiesModel?.data.length}",
+                            textAlign: TextAlign.center,
+                          );
+                        },
                       ),
                     ),
                   ),

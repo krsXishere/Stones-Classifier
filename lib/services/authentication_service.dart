@@ -40,8 +40,6 @@ class AuthenticationService {
         await storage.write(key: "email", value: email);
       }
 
-      log(jsonObject.toString());
-
       return AuthenticationModel.fromJson(jsonObject);
     } catch (e) {
       log("Error sign in service: $e");
