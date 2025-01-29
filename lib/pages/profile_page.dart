@@ -151,7 +151,9 @@ class _ProfilePageState extends State<ProfilePage>
                       child: Consumer<HistoryProvider>(
                         builder: (context, historyProvider, child) {
                           return Text(
-                            "Riwayat\n${historyProvider.historiesModel?.data.length}",
+                            historyProvider.historiesModel?.data.isNotEmpty
+                                ? "Riwayat\n${historyProvider.historiesModel?.data.length}"
+                                : "Riwayat\n0",
                             textAlign: TextAlign.center,
                           );
                         },
