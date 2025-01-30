@@ -130,6 +130,10 @@ class _ProfilePageState extends State<ProfilePage>
                 hintText: "Cari",
                 controller: searchController,
                 isItalicHint: true,
+                suffixIcon: Icon(
+                  Icons.search_rounded,
+                  color: black1,
+                ),
               ),
               SizedBox(
                 height: defaultPadding,
@@ -148,8 +152,8 @@ class _ProfilePageState extends State<ProfilePage>
                     child: Consumer<CollectionProvider>(
                       builder: (context, collectionProvider, child) {
                         return Text(
-                          collectionProvider.collectionsModel?.data.isNotEmpty
-                              ? "Koleksi\n${collectionProvider.collectionsModel?.data.length}"
+                          collectionProvider.collectionsModel?.data != null
+                              ? "Koleksi\n${collectionProvider.collectionsModel?.data?.length}"
                               : "Koleksi\n0",
                           textAlign: TextAlign.center,
                         );
@@ -161,7 +165,7 @@ class _ProfilePageState extends State<ProfilePage>
                       child: Consumer<HistoryProvider>(
                         builder: (context, historyProvider, child) {
                           return Text(
-                            historyProvider.historiesModel?.data.isNotEmpty
+                            historyProvider.historiesModel?.data != null
                                 ? "Riwayat\n${historyProvider.historiesModel?.data.length}"
                                 : "Riwayat\n0",
                             textAlign: TextAlign.center,
@@ -176,7 +180,7 @@ class _ProfilePageState extends State<ProfilePage>
                 height: defaultPadding,
               ),
               SizedBox(
-                height: height(context) * 0.4,
+                height: height(context) * 0.45,
                 child: TabBarView(
                   controller: _tabController,
                   children: const [

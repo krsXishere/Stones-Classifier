@@ -1,14 +1,13 @@
 import 'dart:developer';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:stones_classifier/models/classify_stones_model.dart';
+import 'package:stones_classifier/models/generic_response_model.dart';
 import 'package:stones_classifier/services/classify_stones_service.dart';
 
 class ClassifyStonesProvider with ChangeNotifier {
   final _classifyStonesService = ClassifyStonesService();
-  ClassifyStonesModel? _classifyStonesModel;
-  ClassifyStonesModel? get classifyStonesModel => _classifyStonesModel;
+  GenericResponseModel? _classifyStonesModel;
+  GenericResponseModel? get classifyStonesModel => _classifyStonesModel;
 
   Future<bool> classify(XFile? stoneImage) async {
     try {
