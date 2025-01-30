@@ -35,8 +35,16 @@ class CollectionProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  setSearch(String value) {
-    _search = value;
+  setSearch(
+    {
+    String? value,
+    bool isClear = false,
+  }) {
+    if (isClear) {
+      _search = null;
+    } else {
+      _search = value;
+    }
     notifyListeners();
   }
 
