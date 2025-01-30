@@ -109,6 +109,7 @@ class StoneHistoryPage extends StatelessWidget {
                 )
               : ListView.builder(
                   shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: historyProvider.historiesModel?.data.length ?? 0,
                   itemBuilder: (context, index) {
                     final histories = historyProvider.historiesModel?.data

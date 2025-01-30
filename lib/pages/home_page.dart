@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:stones_classifier/common/constant.dart';
 import 'package:stones_classifier/providers/bottom_navigation_bar_provider.dart';
 import 'package:stones_classifier/providers/history_provider.dart';
+import 'package:stones_classifier/providers/literacy_provider.dart';
 import 'package:stones_classifier/providers/user_provider.dart';
 import 'package:stones_classifier/widgets/card_history_section_widget.dart';
 import 'package:stones_classifier/widgets/list_tile_literacy_section_widget.dart';
@@ -30,6 +31,11 @@ class HomePage extends StatelessWidget {
           context,
           listen: false,
         ).getHistory();
+
+        Provider.of<LiteracyProvider>(
+          context,
+          listen: false,
+        ).getAllLiteracy();
       }
     }
 
@@ -54,6 +60,7 @@ class HomePage extends StatelessWidget {
           },
           child: SingleChildScrollView(
             padding: EdgeInsets.all(defaultPadding),
+            physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
