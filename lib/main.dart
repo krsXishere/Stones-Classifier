@@ -26,6 +26,12 @@ void main() async {
     yield LicenseEntryWithLineBreaks(['google_fonts'], license);
   });
 
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.white,
+    ),
+  );
+
   await initializeDateFormatting('id', null);
 
   token = await storage.read(key: "token");

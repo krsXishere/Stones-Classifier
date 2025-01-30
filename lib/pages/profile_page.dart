@@ -1,12 +1,16 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:stones_classifier/common/constant.dart';
+import 'package:stones_classifier/common/exceptions/app_exception.dart';
 import 'package:stones_classifier/pages/stone_collection_page.dart';
 import 'package:stones_classifier/pages/stone_history_page.dart';
 import 'package:stones_classifier/providers/collection_provider.dart';
 import 'package:stones_classifier/providers/history_provider.dart';
 import 'package:stones_classifier/providers/user_provider.dart';
 import 'package:stones_classifier/widgets/custom_text_form_field_widget.dart';
+import 'package:stones_classifier/widgets/snackbar_widget.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -20,6 +24,19 @@ class _ProfilePageState extends State<ProfilePage>
   TextEditingController searchController = TextEditingController();
   late TabController _tabController;
 
+  Future<FilePickerResult?> pickImage() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: [
+        'png',
+        'jpg',
+        'jpeg',
+      ],
+    );
+
+    return result;
+  }
+
   @override
   void initState() {
     _tabController = TabController(
@@ -32,6 +49,36 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
+    Future<PermissionStatus?> getStoragePermission() async {
+      try {
+        var status = await Permission.storage.status;
+
+        if (status.isDenied) {
+          final result = await Permission.storage.request();
+          return result;
+        } else {
+          return status;
+        }
+      } on AppException catch (e) {
+        if (context.mounted) {
+          showSnackBar(
+            context,
+            e.message,
+            Colors.red,
+          );
+        }
+      } catch (e) {
+        if (context.mounted) {
+          showSnackBar(
+            context,
+            "$e",
+            Colors.red,
+          );
+        }
+      }
+      return null;
+    }
+
     void getData() async {
       final userProvider = Provider.of<UserProvider>(
         context,
@@ -117,30 +164,63 @@ class _ProfilePageState extends State<ProfilePage>
                     children: [
                       Consumer<UserProvider>(
                         builder: (context, userProvider, child) {
-                          return Container(
-                            height: 70,
-                            width: 70,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.circular(defaultBorderRadius),
-                              border: Border.all(),
-                              color: Colors.transparent,
-                            ),
-                            child: userProvider.userModel?.data?.practitioner
-                                        ?.profilePicture !=
-                                    null
-                                ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        defaultBorderRadius),
-                                    child: Image.network(
-                                      "${userProvider.userModel?.data?.practitioner?.profilePicture}",
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )
-                                : Icon(
-                                    Icons.person,
-                                    color: black1,
-                                  ),
+                          return Stack(
+                            children: [
+                              Container(
+                                height: 70,
+                                width: 70,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                      defaultBorderRadius),
+                                  border: Border.all(),
+                                  color: Colors.transparent,
+                                ),
+                                child: userProvider.userModel?.data
+                                            ?.practitioner?.profilePicture !=
+                                        null
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                            defaultBorderRadius),
+                                        child: Image.network(
+                                          "${userProvider.userModel?.data?.practitioner?.profilePicture}",
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : Icon(
+                                        Icons.person,
+                                        color: black1,
+                                      ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: Consumer<UserProvider>(
+                                  builder: (context, userProvider, child) {
+                                    return GestureDetector(
+                                      onTap: () async {
+                                        await getStoragePermission();
+                                        var result = await pickImage();
+                                        await userProvider
+                                            .changeProfilePicture(result);
+                                        await userProvider.getProfileUser();
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.all(4),
+                                        decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(
+                                          Icons.edit_rounded,
+                                          color: black1,
+                                          size: 16,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
                           );
                         },
                       ),
