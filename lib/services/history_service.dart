@@ -7,10 +7,15 @@ import 'package:stones_classifier/models/generic_response_model.dart';
 import 'package:stones_classifier/models/history_model.dart';
 
 class HistoryService {
-  Future<GenericResponseModel?> getHistory(int userId) async {
+  Future<GenericResponseModel?> getHistory(
+    int userId, {
+    String? search,
+  }) async {
     try {
       var token = await storage.read(key: "token");
-      Uri apiUrl = Uri.parse("${baseApiUrl()}/history/get-all-history/$userId");
+      Uri apiUrl = Uri.parse(search == null
+          ? "${baseApiUrl()}/history/get-all-history/$userId"
+          : "${baseApiUrl()}/history/get-all-history/$userId/$search");
       var response = await get(
         apiUrl,
         headers: header(

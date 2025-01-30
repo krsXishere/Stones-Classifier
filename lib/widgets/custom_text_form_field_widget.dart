@@ -13,6 +13,7 @@ class CustomTextFormFieldWidget extends StatelessWidget {
     this.isPrimaryBorderColor = false,
     this.isEnabled = true,
     this.setObscureText,
+    this.onFieldSubmitted,
     this.textInputType = TextInputType.text,
     this.suffixIcon = const SizedBox.shrink(),
   });
@@ -27,6 +28,7 @@ class CustomTextFormFieldWidget extends StatelessWidget {
       isPrimaryBorderColor;
   final TextInputType textInputType;
   final Function()? setObscureText;
+  final Function(String value)? onFieldSubmitted;
   final Widget suffixIcon;
 
   @override
@@ -39,7 +41,7 @@ class CustomTextFormFieldWidget extends StatelessWidget {
       controller: controller,
       keyboardType: textInputType,
       obscureText: isObscureText,
-      // onChanged: onChanged,
+      onFieldSubmitted: onFieldSubmitted,
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: primaryTextStyle.copyWith(

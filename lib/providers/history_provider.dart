@@ -10,17 +10,42 @@ class HistoryProvider with ChangeNotifier {
   GenericResponseModel? get historiesModel => _historiesModel;
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+  int? _userId;
+  String? _search;
 
   setLoading(bool value) {
     _isLoading = value;
     notifyListeners();
   }
 
-  Future<bool> getHistory(int userId) async {
+  setUserId(int value) {
+    _userId = value;
+    notifyListeners();
+  }
+
+  setSearch(
+   {
+    String? value, 
+    bool isClear = false,
+  }) {
+    if (isClear) {
+      _search = null;
+    } else {
+      _search = value;
+    }
+    notifyListeners();
+  }
+
+  Future<bool> getHistory() async {
     try {
       setLoading(true);
 
-      final data = await _historyService.getHistory(userId);
+      if (_userId == null) return false;
+
+      final data = await _historyService.getHistory(
+        _userId!,
+        search: _search,
+      );
 
       _historiesModel = data;
 

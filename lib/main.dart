@@ -12,6 +12,7 @@ import 'package:stones_classifier/providers/camera_provider.dart';
 import 'package:stones_classifier/providers/classify_stones_provider.dart';
 import 'package:stones_classifier/providers/collection_provider.dart';
 import 'package:stones_classifier/providers/history_provider.dart';
+import 'package:stones_classifier/providers/literacy_provider.dart';
 import 'package:stones_classifier/providers/user_provider.dart';
 import 'package:stones_classifier/widgets/bottom_navigation_bar_widget.dart';
 
@@ -60,6 +61,9 @@ class StoneClassifier extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => CollectionProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => LiteracyProvider(),
         ),
       ],
       child: Builder(builder: (context) {
