@@ -13,12 +13,14 @@ class GenericResponseModel<T> {
 
   factory GenericResponseModel.fromJson(
     Map<String, dynamic> json,
-    T Function(dynamic) fromJsonT,
+    T Function(dynamic)? fromJsonT,
   ) {
     try {
       return GenericResponseModel(
         metadata: MetadataModel.fromJson(json['metadata']),
-        data: fromJsonT(json['data']),
+        data: json['data'] != null && fromJsonT != null
+            ? fromJsonT(json['data'])
+            : null,
       );
     } catch (e) {
       log("Error generic response model: $e");

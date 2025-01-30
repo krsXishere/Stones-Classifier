@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stones_classifier/common/constant.dart';
@@ -82,8 +83,7 @@ class StoneHistoryPage extends StatelessWidget {
                         isLoading: collectionProvider.isLoading,
                         onPressed: () async {
                           await collectionProvider.saveToCollection(historyId);
-                          await collectionProvider.getCollection(int.parse(
-                              userProvider.userModel!.data!.id.toString()));
+                          await collectionProvider.getCollection();
 
                           if (context.mounted) {
                             Navigator.of(context).pop();
@@ -103,85 +103,90 @@ class StoneHistoryPage extends StatelessWidget {
       body: Consumer3<HistoryProvider, CollectionProvider, UserProvider>(
         builder: (context, historyProvider, collectionProvider, userProvider,
             child) {
-          return ListView.builder(
-            shrinkWrap: true,
-            itemCount: historyProvider.historiesModel?.data.length ?? 0,
-            itemBuilder: (context, index) {
-              final histories =
-                  historyProvider.historiesModel?.data as List<HistoryModel>?;
+          return historyProvider.isLoading
+              ? const Center(
+                  child: CupertinoActivityIndicator(),
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: historyProvider.historiesModel?.data.length ?? 0,
+                  itemBuilder: (context, index) {
+                    final histories = historyProvider.historiesModel?.data
+                        as List<HistoryModel>?;
 
-              if (histories == null || histories.isEmpty) {
-                return const Center(child: Text("Tidak ada data"));
-              }
+                    if (histories == null || histories.isEmpty) {
+                      return const Center(child: Text("Tidak ada data"));
+                    }
 
-              final history = histories[index];
+                    final history = histories[index];
 
-              return GestureDetector(
-                onTap: () {
-                  saveToCollectionModal(
-                    userProvider,
-                    collectionProvider,
-                    history.id ?? 0,
-                    history.isCollected ?? 0,
-                    history.stoneClassModel?.stoneClass ?? "",
-                    "${history.image}",
-                  );
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  margin: const EdgeInsets.only(bottom: 10),
-                  width: double.maxFinite,
-                  decoration: BoxDecoration(
-                    color: primaryColor,
-                    borderRadius: BorderRadius.circular(defaultBorderRadius),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        height: 50,
-                        width: 50,
+                    return GestureDetector(
+                      onTap: () {
+                        saveToCollectionModal(
+                          userProvider,
+                          collectionProvider,
+                          history.id ?? 0,
+                          history.isCollected ?? 0,
+                          history.stoneClassModel?.stoneClass ?? "",
+                          "${history.image}",
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        margin: const EdgeInsets.only(bottom: 10),
+                        width: double.maxFinite,
                         decoration: BoxDecoration(
+                          color: primaryColor,
                           borderRadius:
                               BorderRadius.circular(defaultBorderRadius),
-                          color: Colors.white,
                         ),
-                        child: history.image != null
-                            ? ClipRRect(
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.circular(defaultBorderRadius),
-                                child: Image.network(
-                                  "${history.image}",
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                            : Icon(
-                                Icons.image_not_supported_rounded,
-                                color: black1,
+                                color: Colors.white,
                               ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        history.stoneClassModel?.stoneClass ?? "",
-                        style: primaryTextStyle,
-                      ),
-                      const Spacer(),
-                      Text(
-                        formatTime(
-                          true,
-                          date: DateTime.parse(
-                            history.createdAt.toString(),
-                          ),
+                              child: history.image != null
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(
+                                          defaultBorderRadius),
+                                      child: Image.network(
+                                        "${history.image}",
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                                  : Icon(
+                                      Icons.image_not_supported_rounded,
+                                      color: black1,
+                                    ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              history.stoneClassModel?.stoneClass ?? "",
+                              style: primaryTextStyle,
+                            ),
+                            const Spacer(),
+                            Text(
+                              formatTime(
+                                true,
+                                date: DateTime.parse(
+                                  history.createdAt.toString(),
+                                ),
+                              ),
+                              style: primaryTextStyle,
+                            ),
+                          ],
                         ),
-                        style: primaryTextStyle,
                       ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
+                    );
+                  },
+                );
         },
       ),
     );

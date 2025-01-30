@@ -51,9 +51,19 @@ class _ProfilePageState extends State<ProfilePage>
         Provider.of<CollectionProvider>(
           context,
           listen: false,
-        ).getCollection(
-          int.parse(userProvider.userModel!.data!.id.toString()),
-        );
+        ).setUserId(userProvider.userModel!.data!.id);
+
+        Provider.of<CollectionProvider>(
+          context,
+          listen: false,
+        ).getCollection();
+
+        // Provider.of<CollectionProvider>(
+        //   context,
+        //   listen: false,
+        // ).getCollectionsPaginated(
+        //   int.parse(userProvider.userModel!.data!.id.toString()),
+        // );
       }
     });
 
@@ -79,18 +89,34 @@ class _ProfilePageState extends State<ProfilePage>
               ),
               Row(
                 children: [
-                  Container(
-                    height: 70,
-                    width: 70,
-                    decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(defaultBorderRadius),
-                        border: Border.all(),
-                        color: Colors.transparent),
-                    child: Icon(
-                      Icons.person,
-                      color: black1,
-                    ),
+                  Consumer<UserProvider>(
+                    builder: (context, userProvider, child) {
+                      return Container(
+                        height: 70,
+                        width: 70,
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(defaultBorderRadius),
+                          border: Border.all(),
+                          color: Colors.transparent,
+                        ),
+                        child: userProvider.userModel?.data?.practitioner
+                                    ?.profilePicture !=
+                                null
+                            ? ClipRRect(
+                                borderRadius:
+                                    BorderRadius.circular(defaultBorderRadius),
+                                child: Image.network(
+                                  "${userProvider.userModel?.data?.practitioner?.profilePicture}",
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : Icon(
+                                Icons.person,
+                                color: black1,
+                              ),
+                      );
+                    },
                   ),
                   SizedBox(
                     width: defaultPadding,
@@ -108,10 +134,7 @@ class _ProfilePageState extends State<ProfilePage>
                             ),
                           ),
                           Text(
-                            userProvider.userModel?.data?.practitioner
-                                    ?.accessTypeModel.access
-                                    .toString() ??
-                                "",
+                            "${userProvider.userModel?.data?.practitioner?.accessTypeModel.access.toString()} Akses",
                             style: secondaryTextStyle.copyWith(
                               fontSize: 16,
                               color: primaryColor,
@@ -126,14 +149,22 @@ class _ProfilePageState extends State<ProfilePage>
               SizedBox(
                 height: defaultPadding,
               ),
-              CustomTextFormFieldWidget(
-                hintText: "Cari",
-                controller: searchController,
-                isItalicHint: true,
-                suffixIcon: Icon(
-                  Icons.search_rounded,
-                  color: black1,
-                ),
+              Consumer2<CollectionProvider, HistoryProvider>(
+                builder: (context, collectionProvider, historyProvider, child) {
+                  return CustomTextFormFieldWidget(
+                    hintText: "Cari",
+                    controller: searchController,
+                    isItalicHint: true,
+                    suffixIcon: Icon(
+                      Icons.search_rounded,
+                      color: black1,
+                    ),
+                    onFieldSubmitted: (value) async {
+                      collectionProvider.setSearch(value);
+                      await collectionProvider.getCollection();
+                    },
+                  );
+                },
               ),
               SizedBox(
                 height: defaultPadding,
