@@ -22,31 +22,30 @@ class ClassifyPage extends StatelessWidget {
     showClassifyModal(String predictedClass) {
       showModal(
         context,
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Center(
-              child: Text(
-                "Klasifikasi Berhasil",
-                style: secondaryTextStyle,
+        [
+          Center(
+            child: Text(
+              "Klasifikasi Berhasil",
+              style: secondaryTextStyle.copyWith(
+                fontWeight: bold,
               ),
             ),
-            SizedBox(
-              height: defaultPadding,
-            ),
-            Center(
-              child: Text(
-                predictedClass,
-                style: secondaryTextStyle.copyWith(
-                  fontWeight: semiBold,
-                ),
+          ),
+          SizedBox(
+            height: defaultPadding,
+          ),
+          Center(
+            child: Text(
+              predictedClass,
+              style: secondaryTextStyle.copyWith(
+                fontWeight: semiBold,
               ),
             ),
-            SizedBox(
-              height: height(context) * 0.3,
-            ),
-          ],
-        ),
+          ),
+          SizedBox(
+            height: height(context) * 0.3,
+          ),
+        ],
       );
     }
 

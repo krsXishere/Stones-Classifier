@@ -153,7 +153,7 @@ class _ProfilePageState extends State<ProfilePage>
                       builder: (context, collectionProvider, child) {
                         return Text(
                           collectionProvider.collectionsModel?.data != null
-                              ? "Koleksi\n${collectionProvider.collectionsModel?.data.length}"
+                              ? "Koleksi\n${collectionProvider.collectionsModel?.data?.length}"
                               : "Koleksi\n0",
                           textAlign: TextAlign.center,
                         );

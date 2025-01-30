@@ -3,7 +3,7 @@ import 'package:stones_classifier/common/constant.dart';
 
 showModal(
   BuildContext context,
-  Widget content, {
+  List<Widget> content, {
   int? index,
   bool isScrollControlled = false,
 }) {
@@ -15,7 +15,7 @@ showModal(
         children: [
           Container(
             padding: EdgeInsets.all(defaultPadding),
-            width: double.maxFinite,
+            width: width(context),
             decoration: BoxDecoration(
               color: white,
               borderRadius: BorderRadius.vertical(
@@ -36,7 +36,7 @@ showModal(
                     ),
                   ),
                 ),
-                content,
+                ...content,
               ],
             ),
           ),

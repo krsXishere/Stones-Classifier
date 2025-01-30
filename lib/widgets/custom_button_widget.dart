@@ -12,7 +12,7 @@ class CustomButtonWidget extends StatelessWidget {
     super.key,
     required this.text,
     required this.color,
-    required this.isLoading,
+    this.isLoading = false,
     this.isEnable = true,
     this.isAutoSize = false,
     required this.onPressed,

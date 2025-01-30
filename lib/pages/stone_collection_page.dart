@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stones_classifier/common/constant.dart';
-import 'package:stones_classifier/models/collection_model.dart';
 import 'package:stones_classifier/providers/collection_provider.dart';
 
 class StoneCollectionPage extends StatelessWidget {
@@ -14,10 +13,9 @@ class StoneCollectionPage extends StatelessWidget {
       body: Consumer<CollectionProvider>(
         builder: (context, collectionProvider, child) {
           return ListView.builder(
-            itemCount: collectionProvider.collectionsModel?.data.length ?? 0,
+            itemCount: collectionProvider.collectionsModel?.data?.length ?? 0,
             itemBuilder: (context, index) {
-              final collections = collectionProvider.collectionsModel?.data
-                  as List<CollectionModel>?;
+              final collections = collectionProvider.collectionsModel?.data;
 
               if (collections == null || collections.isEmpty) {
                 return const Center(child: Text("Tidak ada data"));
@@ -43,6 +41,19 @@ class StoneCollectionPage extends StatelessWidget {
                             BorderRadius.circular(defaultBorderRadius),
                         color: Colors.white,
                       ),
+                      child: collection.image != null
+                          ? ClipRRect(
+                              borderRadius:
+                                  BorderRadius.circular(defaultBorderRadius),
+                              child: Image.network(
+                                "${collection.image}",
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : Icon(
+                              Icons.image_not_supported_rounded,
+                              color: black1,
+                            ),
                     ),
                     const SizedBox(
                       width: 10,
