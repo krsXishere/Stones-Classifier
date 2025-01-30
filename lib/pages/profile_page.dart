@@ -41,17 +41,20 @@ class _ProfilePageState extends State<ProfilePage>
       await userProvider.getProfileUser();
 
       if (context.mounted && userProvider.userModel?.data != null) {
-        Provider.of<HistoryProvider>(
-          context,
-          listen: false,
-        ).getHistory(
-          int.parse(userProvider.userModel!.data!.id.toString()),
-        );
-
         Provider.of<CollectionProvider>(
           context,
           listen: false,
         ).setUserId(userProvider.userModel!.data!.id);
+
+        Provider.of<HistoryProvider>(
+          context,
+          listen: false,
+        ).setUserId(userProvider.userModel!.data!.id);
+
+        Provider.of<HistoryProvider>(
+          context,
+          listen: false,
+        ).getHistory();
 
         Provider.of<CollectionProvider>(
           context,
@@ -160,8 +163,13 @@ class _ProfilePageState extends State<ProfilePage>
                       color: black1,
                     ),
                     onFieldSubmitted: (value) async {
-                      collectionProvider.setSearch(value);
-                      await collectionProvider.getCollection();
+                      if (_tabController.index == 0) {
+                        await collectionProvider.setSearch(value);
+                        await collectionProvider.getCollection();
+                      } else {
+                        await historyProvider.setSearch(value);
+                        await historyProvider.getHistory();
+                      }
                     },
                   );
                 },
