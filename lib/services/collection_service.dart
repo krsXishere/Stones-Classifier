@@ -96,4 +96,30 @@ class CollectionService {
           "Terjadi kesalahan saat memuat data. Silakan coba lagi.");
     }
   }
+
+  Future<GenericResponseModel?> deleteFromCollection(int historyId) async {
+    try {
+      var token = await storage.read(key: "token");
+      Uri apiUrl =
+          Uri.parse("${baseApiUrl()}/collection/delete-from-collection/$historyId");
+      var response = await post(
+        apiUrl,
+        headers: header(
+          true,
+          token: token,
+        ),
+      );
+
+      var jsonObject = jsonDecode(response.body);
+
+      return GenericResponseModel.fromJson(
+        jsonObject,
+        (data) => CollectionModel.fromJson(data),
+      );
+    } catch (e) {
+      log("Error delete from collection service: $e");
+      throw AppException(
+          "Terjadi kesalahan saat memuat data. Silakan coba lagi.");
+    }
+  }
 }

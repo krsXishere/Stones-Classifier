@@ -175,6 +175,30 @@ class CollectionProvider with ChangeNotifier {
           "Terjadi kesalahan saat memuat data. Silakan coba lagi.");
     }
   }
+  
+  Future<bool> deleteFromCollection(int historyId) async {
+    try {
+      setLoading(true);
+
+      final data = await _collectionService.deleteFromCollection(historyId);
+
+      _collectionModel = data;
+
+      if (_collectionsModel?.metadata?.code == 200) {
+        setLoading(false);
+
+        return true;
+      } else {
+        setLoading(false);
+
+        return false;
+      }
+    } catch (e) {
+      log("Error delete from collection provider: $e");
+      throw AppException(
+          "Terjadi kesalahan saat memuat data. Silakan coba lagi.");
+    }
+  }
 
   @override
   void dispose() {
