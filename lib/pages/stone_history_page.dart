@@ -14,6 +14,7 @@ class StoneHistoryPage extends StatelessWidget {
       body: Consumer<HistoryProvider>(
         builder: (context, historyProvider, child) {
           return ListView.builder(
+            shrinkWrap: true,
             itemCount: historyProvider.historiesModel?.data.length ?? 0,
             itemBuilder: (context, index) {
               final histories =
@@ -43,6 +44,19 @@ class StoneHistoryPage extends StatelessWidget {
                             BorderRadius.circular(defaultBorderRadius),
                         color: Colors.white,
                       ),
+                      child: history.image != null
+                          ? ClipRRect(
+                              borderRadius:
+                                  BorderRadius.circular(defaultBorderRadius),
+                              child: Image.network(
+                                "${history.image}",
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : Icon(
+                              Icons.image_not_supported_rounded,
+                              color: black1,
+                            ),
                     ),
                     const SizedBox(
                       width: 10,

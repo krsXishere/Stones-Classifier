@@ -6,31 +6,34 @@ import 'package:http/http.dart';
 import 'package:stones_classifier/common/constant.dart';
 import 'package:stones_classifier/models/classify_stones_model.dart';
 import 'package:path/path.dart' as path;
+import 'package:stones_classifier/models/generic_response_model.dart';
 
 class ClassifyStonesService {
-  Future<ClassifyStonesModel?> classify(XFile? stoneImage) async {
+  Future<GenericResponseModel?> classify(XFile? stoneImage) async {
     try {
+      var email = await storage.read(key: "email");
+      var token = await storage.read(key: "token");
+
       if (stoneImage != null) {
         // Kompres gambar
         final compressedFile = await FlutterImageCompress.compressWithFile(
           stoneImage.path,
-          quality: 75, // Atur kualitas (0-100)
+          quality: 75,
           format: CompressFormat.jpeg,
         );
 
         if (compressedFile != null) {
-          // Simpan file hasil kompres ke direktori sementara
           final tempFile = File('${stoneImage.path}_compressed.jpg');
           await tempFile.writeAsBytes(compressedFile);
 
-          // Buat request Multipart
           var request = MultipartRequest(
             "POST",
-            Uri.parse("${baseApiUrl()}/classify"),
+            Uri.parse("${baseApiUrl()}/classify/$email"),
           );
 
           request.headers.addAll({
             'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
             'Content-Type': 'multipart/form-data',
           });
 
@@ -51,7 +54,10 @@ class ClassifyStonesService {
 
           if (response.statusCode == 200) {
             var jsonObject = jsonDecode(response.body);
-            return ClassifyStonesModel.fromJson(jsonObject);
+            return GenericResponseModel.fromJson(
+              jsonObject,
+              (data) => ClassifyStonesModel.fromJson(data),
+            );
           } else {
             log("Server error: ${response.statusCode}");
           }

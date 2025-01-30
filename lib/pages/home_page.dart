@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:stones_classifier/common/constant.dart';
+import 'package:stones_classifier/providers/bottom_navigation_bar_provider.dart';
 import 'package:stones_classifier/widgets/card_history_section_widget.dart';
 import 'package:stones_classifier/widgets/list_tile_literacy_section_widget.dart';
 
@@ -30,29 +32,39 @@ class HomePage extends StatelessWidget {
                 height: defaultPadding,
               ),
               Center(
-                child: Container(
-                  padding: EdgeInsets.all(defaultPadding),
-                  width: double.maxFinite,
-                  decoration: BoxDecoration(
-                    color: primaryColor,
-                    borderRadius: BorderRadius.circular(defaultBorderRadius),
-                  ),
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.camera_alt_rounded,
-                        color: white,
-                        size: 30,
-                      ),
-                      Text(
-                        "Identifikasi",
-                        style: primaryTextStyle.copyWith(
-                          fontSize: 18,
-                          fontWeight: bold,
+                child: Consumer<BottomNavigationBarProvider>(
+                  builder: (context, bottomNavigationBarProvider, child) {
+                    return GestureDetector(
+                      onTap: () {
+                        bottomNavigationBarProvider.setCurrentIndex(1);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(defaultPadding),
+                        width: double.maxFinite,
+                        decoration: BoxDecoration(
+                          color: primaryColor,
+                          borderRadius:
+                              BorderRadius.circular(defaultBorderRadius),
+                        ),
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.camera_alt_rounded,
+                              color: white,
+                              size: 30,
+                            ),
+                            Text(
+                              "Identifikasi",
+                              style: primaryTextStyle.copyWith(
+                                fontSize: 18,
+                                fontWeight: bold,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
               ),
               SizedBox(

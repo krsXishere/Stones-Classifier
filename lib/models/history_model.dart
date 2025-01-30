@@ -2,7 +2,7 @@ import 'package:stones_classifier/models/stone_class_model.dart';
 
 class HistoryModel {
   int? id, isCollected, stoneClassId, practitionerId;
-  String? createdAt, updatedAt;
+  String? image, createdAt, updatedAt;
   StoneClassModel? stoneClassModel;
 
   HistoryModel({
@@ -10,6 +10,7 @@ class HistoryModel {
     required this.isCollected,
     required this.stoneClassId,
     required this.practitionerId,
+    required this.image,
     required this.createdAt,
     required this.updatedAt,
     required this.stoneClassModel,
@@ -18,6 +19,7 @@ class HistoryModel {
   factory HistoryModel.fromJson(Map<String, dynamic> object) {
     return HistoryModel(
       id: object['id'],
+      image: object['image'],
       isCollected: object['isCollected'],
       stoneClassId: object['stoneClassId'],
       practitionerId: object['practitionerId'],

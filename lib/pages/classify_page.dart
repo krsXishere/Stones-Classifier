@@ -114,7 +114,7 @@ class ClassifyPage extends StatelessWidget {
                         if (classifyStonesProvider.classifyStonesModel !=
                             null) {
                           showClassifyModal(classifyStonesProvider
-                              .classifyStonesModel!.predictedClass!);
+                              .classifyStonesModel!.data.predictedClass!);
                         } else {
                           guardedSnackbar(
                             "Gagal",

@@ -57,12 +57,10 @@ class CameraProvider with ChangeNotifier {
     log("${e.code}\n${e.description}");
   }
 
-  @override
-  void dispose() {
+  void clearCamera() {
     if (_cameraController != null) {
       _cameraController!.dispose();
       _cameraController = null;
     }
-    super.dispose();
   }
 }

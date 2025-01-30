@@ -10,8 +10,8 @@ class ClassifyStonesModel {
   factory ClassifyStonesModel.fromJson(Map<String, dynamic> object) {
     return ClassifyStonesModel(
       fileName: object['filename'].toString(),
-      predictedClass: object['predicted_class'].toString(),
-      confidenceLevel: double.parse(object['confidence_level'].toString())
+      predictedClass: object['predictedClass'].toString(),
+      confidenceLevel: double.parse(object['confidenceLevel'].toString())
           .round()
           .toString(),
     );
