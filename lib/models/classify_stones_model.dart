@@ -11,9 +11,8 @@ class ClassifyStonesModel {
     return ClassifyStonesModel(
       fileName: object['filename'].toString(),
       predictedClass: object['predictedClass'].toString(),
-      confidenceLevel: double.parse(object['confidenceLevel'].toString())
-          .round()
-          .toString(),
+      confidenceLevel:
+          double.parse(object['confidenceLevel'].toString()).round().toString(),
     );
   }
 }
