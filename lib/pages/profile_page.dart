@@ -351,10 +351,20 @@ class _ProfilePageState extends State<ProfilePage>
             [
               Center(
                 child: Text(
-                  "Keluar",
+                  "Keluar?",
                   style: secondaryTextStyle.copyWith(
                     fontWeight: bold,
                   ),
+                ),
+              ),
+              SizedBox(
+                height: defaultPadding,
+              ),
+              Center(
+                child: Text(
+                  "Data Anda aman! Jika keluar dari aplikasi, semua informasi dan progress Anda akan tersimpan otomatis. Anda bisa melanjutkan dari tempat terakhir kali kapan pun Anda kembali.",
+                  style: secondaryTextStyle,
+                  textAlign: TextAlign.center,
                 ),
               ),
               SizedBox(
