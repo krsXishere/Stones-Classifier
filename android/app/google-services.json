@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "206220855394",
+    "project_id": "stone-classifier",
+    "storage_bucket": "stone-classifier.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:206220855394:android:7dfe8bb3746dafd5c9a93b",
+        "android_client_info": {
+          "package_name": "com.example.stones_classifier"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "206220855394-1msr3upeinvsea09iq11238mr8pu5ojb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.stones_classifier",
+            "certificate_hash": "7ff94e8082c2f71e762f4d3d2aa81124becd9076"
+          }
+        },
+        {
+          "client_id": "206220855394-vr30di7igtl3mirj9jlc17m1qbdce2fp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbWsM2mqe-jgaNwioq-MIAMz_A0xWJ9z0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "206220855394-vr30di7igtl3mirj9jlc17m1qbdce2fp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

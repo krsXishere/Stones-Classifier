@@ -100,7 +100,7 @@ class StoneCollectionPage extends StatelessWidget {
                   child: CupertinoActivityIndicator(),
                 )
               : ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   itemCount:
                       collectionProvider.collectionsModel?.data?.length ?? 0,
                   itemBuilder: (context, index) {

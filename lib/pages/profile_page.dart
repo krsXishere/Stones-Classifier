@@ -1,15 +1,20 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:stones_classifier/common/constant.dart';
 import 'package:stones_classifier/common/exceptions/app_exception.dart';
+import 'package:stones_classifier/pages/sign_in_page.dart';
 import 'package:stones_classifier/pages/stone_collection_page.dart';
 import 'package:stones_classifier/pages/stone_history_page.dart';
+import 'package:stones_classifier/providers/bottom_navigation_bar_provider.dart';
 import 'package:stones_classifier/providers/collection_provider.dart';
 import 'package:stones_classifier/providers/history_provider.dart';
 import 'package:stones_classifier/providers/user_provider.dart';
+import 'package:stones_classifier/widgets/custom_button_widget.dart';
 import 'package:stones_classifier/widgets/custom_text_form_field_widget.dart';
+import 'package:stones_classifier/widgets/modal_bottom_sheet_widget.dart';
 import 'package:stones_classifier/widgets/snackbar_widget.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -336,6 +341,74 @@ class _ProfilePageState extends State<ProfilePage>
               ),
             ),
           ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.red,
+        onPressed: () {
+          showModal(
+            context,
+            [
+              Center(
+                child: Text(
+                  "Keluar",
+                  style: secondaryTextStyle.copyWith(
+                    fontWeight: bold,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: defaultPadding,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Consumer<BottomNavigationBarProvider>(
+                      builder: (context, bottomNavigationBarProvider, child) {
+                        return CustomButtonWidget(
+                          text: "Keluar",
+                          color: Colors.red,
+                          onPressed: () async {
+                            await storage.deleteAll();
+
+                            if (context.mounted) {
+                              Navigator.of(context).pushAndRemoveUntil(
+                                PageTransition(
+                                  child: const SignInPage(),
+                                  type: PageTransitionType.rightToLeft,
+                                ),
+                                (Route<dynamic> route) => false,
+                              );
+                            }
+
+                            await bottomNavigationBarProvider
+                                .setCurrentIndex(0);
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    width: defaultPadding,
+                  ),
+                  Expanded(
+                    child: CustomButtonWidget(
+                      text: "Batal",
+                      color: primaryColor,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ),
+                ],
+              )
+            ],
+          );
+        },
+        tooltip: "Keluar",
+        child: Icon(
+          Icons.logout_rounded,
+          color: white,
         ),
       ),
     );
