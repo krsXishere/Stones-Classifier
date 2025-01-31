@@ -7,16 +7,6 @@ import 'package:stones_classifier/models/authentication_model.dart';
 import '../common/exceptions/app_exception.dart';
 
 class AuthenticationService {
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: [
-      'email',
-      'profile',
-    ],
-    hostedDomain: '',
-    clientId:
-        "709863071057-sm7n5e292lr82g5fjjj4teea5dmmuh3g.apps.googleusercontent.com",
-  );
-
   Future<AuthenticationModel?> signIn(
     String email,
     String password,
@@ -49,67 +39,35 @@ class AuthenticationService {
 
   Future<AuthenticationModel?> signInWithGoogle() async {
     try {
+      final GoogleSignIn googleSignIn = GoogleSignIn();
       Uri apiUrl = Uri.parse("${baseApiUrl()}/authentication/google-sign-in");
-      await _googleSignIn.signIn().then((result) {
-        result?.authentication.then((googleKey) async {
-          var response = await post(
-            apiUrl,
-            headers: header(false),
-            body: {
-              "idToken": googleKey.idToken,
-            },
-          );
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      if (googleUser == null) {
+        throw Exception("Google sign-in dibatalkan oleh pengguna.");
+      }
 
-          var jsonObject = jsonDecode(response.body);
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
-          if (response.statusCode == 200) {
-            await storage.write(key: "token", value: jsonObject['data']);
-            await storage.write(key: "email", value: result.email);
-          }
+      var response = await post(
+        apiUrl,
+        headers: header(false),
+        body: {
+          "idToken": googleAuth.idToken.toString(),
+        },
+      );
 
-          log(response.toString());
+      var jsonObject = jsonDecode(response.body);
 
-          return AuthenticationModel.fromJson(jsonObject);
-        }).catchError((e) {
-          throw AppException("$e");
-        });
-      }).catchError((e) {
-        throw AppException("$e");
-      });
+      if (response.statusCode == 200) {
+        await storage.write(key: "token", value: jsonObject['data']);
+        await storage.write(key: "email", value: googleUser.email);
+      }
 
-      // if (googleUser == null) {
-      //   throw AppException("Google sign-in dibatalkan oleh pengguna.");
-      // }
-
-      // final GoogleSignInAuthentication googleAuthentication =
-      //     await googleUser.authentication;
-
-      // log("Google User: ${googleUser.email}");
-      // log("Google Auth: ${googleAuthentication.toString()}");
-
-      // if (googleAuthentication.idToken == null) {
-      //   throw AppException("Gagal mendapatkan ID Token dari Google.");
-      // }
-
-      // log("Google Auth Id Token: ${googleAuthentication.idToken}");
-
-      // var response = await post(
-      //   apiUrl,
-      //   headers: header(false),
-      //   body: {
-      //     "idToken": googleAuthentication.idToken,
-      //   },
-      // );
-
-      // var jsonObject = jsonDecode(response.body);
-
-      // log(response.toString());
-
-      // return AuthenticationModel.fromJson(jsonObject);
+      return AuthenticationModel.fromJson(jsonObject);
     } catch (e) {
       log("Error sign in with google service: $e");
       throw AppException("Terjadi kesalahan saat masuk. Silakan coba lagi.");
     }
-    return null;
   }
 }

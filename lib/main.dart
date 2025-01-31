@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,6 +26,14 @@ void main() async {
     final license = await rootBundle.loadString('google_fonts/OFL.txt');
     yield LicenseEntryWithLineBreaks(['google_fonts'], license);
   });
+
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.black,
+    ),
+  );
+
+  await Firebase.initializeApp();
 
   await initializeDateFormatting('id', null);
 
@@ -67,6 +76,7 @@ class StoneClassifier extends StatelessWidget {
         ),
       ],
       child: Builder(builder: (context) {
+        setStatusBarColorBasedOnTheme(context);
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           home: token != null

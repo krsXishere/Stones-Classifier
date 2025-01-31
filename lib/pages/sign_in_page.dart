@@ -215,7 +215,7 @@ class _SignInPageState extends State<SignInPage> {
                             width: 10,
                           ),
                           Text(
-                            "Atau",
+                            "atau",
                             style: secondaryTextStyle.copyWith(fontSize: 16),
                           ),
                           const SizedBox(

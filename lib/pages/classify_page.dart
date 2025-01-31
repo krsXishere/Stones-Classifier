@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stones_classifier/common/constant.dart';
+import 'package:stones_classifier/common/exceptions/app_exception.dart';
 import 'package:stones_classifier/providers/camera_provider.dart';
 import 'package:stones_classifier/providers/classify_stones_provider.dart';
+import 'package:stones_classifier/widgets/custom_button_widget.dart';
 import 'package:stones_classifier/widgets/modal_bottom_sheet_widget.dart';
 import 'package:stones_classifier/widgets/snackbar_widget.dart';
 
@@ -19,13 +23,13 @@ class ClassifyPage extends StatelessWidget {
       ).initCamera();
     });
 
-    showClassifyModal(String predictedClass) {
+    showClassifyModal(String predictedClass, XFile? image) {
       showModal(
         context,
         [
           Center(
             child: Text(
-              "Klasifikasi Berhasil",
+              "Identifikasi Berhasil",
               style: secondaryTextStyle.copyWith(
                 fontWeight: bold,
               ),
@@ -43,7 +47,28 @@ class ClassifyPage extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: height(context) * 0.3,
+            height: defaultPadding,
+          ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(defaultBorderRadius),
+            child: SizedBox(
+              height: height(context) * 0.3,
+              width: double.maxFinite,
+              child: Image.file(
+                File(image!.path),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: defaultPadding,
+          ),
+          CustomButtonWidget(
+            text: "Kembali",
+            color: primaryColor,
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
           ),
         ],
       );
@@ -105,21 +130,39 @@ class ClassifyPage extends StatelessWidget {
                     (context, cameraProvider, classifyStonesProvider, child) {
                   return GestureDetector(
                     onTap: () async {
-                      // showClassifyModal("Test");
-                      final image = await cameraProvider.takePicture();
-                      if (image != null) {
-                        await classifyStonesProvider.classify(image);
+                      try {
+                        final image = await cameraProvider.takePicture();
 
-                        if (classifyStonesProvider.classifyStonesModel !=
-                            null) {
-                          showClassifyModal(classifyStonesProvider
-                              .classifyStonesModel!.data.predictedClass!);
-                        } else {
-                          guardedSnackbar(
-                            "Gagal",
-                            Colors.red,
-                          );
+                        if (image != null) {
+                          await classifyStonesProvider.classify(image);
+
+                          if (classifyStonesProvider.classifyStonesModel !=
+                              null) {
+                            showClassifyModal(
+                              classifyStonesProvider
+                                  .classifyStonesModel!.data.predictedClass!,
+                              image,
+                            );
+                          } else {
+                            if (context.mounted) {
+                              showSnackBar(
+                                context,
+                                "Gagal",
+                                Colors.red,
+                              );
+                            }
+                          }
                         }
+                      } on AppException catch (e) {
+                        guardedSnackbar(
+                          e.message,
+                          Colors.red,
+                        );
+                      } catch (e) {
+                        guardedSnackbar(
+                          "$e",
+                          Colors.red,
+                        );
                       }
                     },
                     child: Container(

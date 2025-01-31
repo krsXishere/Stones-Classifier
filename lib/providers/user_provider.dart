@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:stones_classifier/common/exceptions/app_exception.dart';
 import 'package:stones_classifier/models/generic_response_model.dart';
@@ -21,6 +22,30 @@ class UserProvider with ChangeNotifier {
       setLoading(true);
 
       final data = await _userService.getProfileUser();
+
+      _userModel = data;
+
+      if (_userModel?.metadata?.code == 200) {
+        setLoading(false);
+
+        return true;
+      } else {
+        setLoading(false);
+
+        return false;
+      }
+    } catch (e) {
+      setLoading(false);
+      log("Error get profile provider: $e");
+      throw AppException("Terjadi kesalahan saat memuat. Silakan coba lagi.");
+    }
+  }
+
+  Future<bool> changeProfilePicture(FilePickerResult? image) async {
+    try {
+      setLoading(true);
+
+      final data = await _userService.changeProfilePicture(image);
 
       _userModel = data;
 
