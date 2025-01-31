@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:stones_classifier/common/constant.dart';
+import 'package:stones_classifier/common/exceptions/app_exception.dart';
 import 'package:stones_classifier/pages/validate_otp_page.dart';
 import 'package:stones_classifier/providers/authentication_provider.dart';
 import 'package:stones_classifier/widgets/custom_button_widget.dart';
 import 'package:stones_classifier/widgets/custom_text_form_field_widget.dart';
+import 'package:stones_classifier/widgets/snackbar_widget.dart';
 
 class RequestOtpPage extends StatefulWidget {
   const RequestOtpPage({super.key});
@@ -19,6 +21,60 @@ class _RequestOtpPageState extends State<RequestOtpPage> {
 
   @override
   Widget build(BuildContext context) {
+    void requestOtp(
+      AuthenticationProvider authenticationProvider,
+      String email,
+    ) async {
+      try {
+        if (email.isNotEmpty) {
+          if (await authenticationProvider.requestOtp(email)) {
+            if (context.mounted) {
+              Navigator.of(context).push(
+                PageTransition(
+                  child: ValidateOtpPage(
+                    email: email,
+                  ),
+                  type: PageTransitionType.rightToLeft,
+                ),
+              );
+            }
+          } else {
+            if (context.mounted) {
+              showSnackBar(
+                context,
+                "${authenticationProvider.genericResponseModel?.metadata?.message}",
+                Colors.red,
+              );
+            }
+          }
+        } else {
+          if (context.mounted) {
+            showSnackBar(
+              context,
+              "Isi semua data.",
+              Colors.red,
+            );
+          }
+        }
+      } on AppException catch (e) {
+        if (context.mounted) {
+          showSnackBar(
+            context,
+            e.message,
+            Colors.red,
+          );
+        }
+      } catch (e) {
+        if (context.mounted) {
+          showSnackBar(
+            context,
+            "$e",
+            Colors.red,
+          );
+        }
+      }
+    }
+
     return Scaffold(
       backgroundColor: white,
       body: SafeArea(
@@ -95,11 +151,9 @@ class _RequestOtpPageState extends State<RequestOtpPage> {
                             color: primaryColor,
                             isLoading: authenticationProvider.isLoading,
                             onPressed: () {
-                              Navigator.of(context).push(
-                                PageTransition(
-                                  child: const ValidateOtpPage(),
-                                  type: PageTransitionType.rightToLeft,
-                                ),
+                              requestOtp(
+                                authenticationProvider,
+                                emailController.text,
                               );
                             },
                           );

@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:stones_classifier/common/constant.dart';
+import 'package:stones_classifier/common/exceptions/app_exception.dart';
+import 'package:stones_classifier/pages/sign_in_page.dart';
 import 'package:stones_classifier/providers/authentication_provider.dart';
 import 'package:stones_classifier/widgets/custom_button_widget.dart';
 import 'package:stones_classifier/widgets/custom_text_form_field_widget.dart';
+import 'package:stones_classifier/widgets/snackbar_widget.dart';
 
 class ChangePasswordPage extends StatefulWidget {
-  const ChangePasswordPage({super.key});
+  const ChangePasswordPage({
+    super.key,
+    required this.email,
+  });
+
+  final String email;
 
   @override
   State<ChangePasswordPage> createState() => _ChangePasswordPageState();
@@ -19,6 +28,76 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   @override
   Widget build(BuildContext context) {
+    void changePassword(
+      AuthenticationProvider authenticationProvider,
+      String email,
+      String password,
+      String confirmPassword,
+    ) async {
+      try {
+        if (email.isNotEmpty &&
+            password.isNotEmpty &&
+            confirmPassword.isNotEmpty) {
+          if (password == confirmPassword) {
+            if (await authenticationProvider.changePassword(
+              email,
+              password,
+            )) {
+              if (context.mounted) {
+                Navigator.of(context).pushAndRemoveUntil(
+                  PageTransition(
+                    child: const SignInPage(),
+                    type: PageTransitionType.rightToLeft,
+                  ),
+                  (Route<dynamic> route) => false,
+                );
+              }
+            } else {
+              if (context.mounted) {
+                showSnackBar(
+                  context,
+                  "${authenticationProvider.genericResponseModel?.metadata?.message}",
+                  Colors.red,
+                );
+              }
+            }
+          } else {
+            if (context.mounted) {
+              showSnackBar(
+                context,
+                "Kata sandi tidak sama.",
+                Colors.red,
+              );
+            }
+          }
+        } else {
+          if (context.mounted) {
+            showSnackBar(
+              context,
+              "Isi semua data.",
+              Colors.red,
+            );
+          }
+        }
+      } on AppException catch (e) {
+        if (context.mounted) {
+          showSnackBar(
+            context,
+            e.message,
+            Colors.red,
+          );
+        }
+      } catch (e) {
+        if (context.mounted) {
+          showSnackBar(
+            context,
+            "$e",
+            Colors.red,
+          );
+        }
+      }
+    }
+
     return Scaffold(
       backgroundColor: white,
       body: SafeArea(
@@ -80,14 +159,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       SizedBox(
                         height: defaultPadding,
                       ),
-                      CustomTextFormFieldWidget(
-                        hintText: "Alamat email",
-                        controller: emailController,
-                        isFilled: true,
-                      ),
-                      SizedBox(
-                        height: defaultPadding,
-                      ),
                       Consumer<AuthenticationProvider>(
                         builder: (context, authenticationProvider, child) {
                           return CustomTextFormFieldWidget(
@@ -126,10 +197,17 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       Consumer<AuthenticationProvider>(
                         builder: (context, authenticationProvider, child) {
                           return CustomButtonWidget(
-                            text: "Ganti Kata Sandi",
+                            text: "Ubah Kata Sandi",
                             color: primaryColor,
                             isLoading: authenticationProvider.isLoading,
-                            onPressed: () {},
+                            onPressed: () {
+                              changePassword(
+                                authenticationProvider,
+                                widget.email,
+                                passwordController.text,
+                                confirmPasswordController.text,
+                              );
+                            },
                           );
                         },
                       ),
