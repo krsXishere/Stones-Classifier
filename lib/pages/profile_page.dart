@@ -84,6 +84,33 @@ class _ProfilePageState extends State<ProfilePage>
       return null;
     }
 
+    void changeProfilePicture(UserProvider userProvider) async {
+      await getStoragePermission();
+      var result = await pickImage();
+
+      if (result != null) {
+        if (await userProvider.changeProfilePicture(result)) {
+          await userProvider.getProfileUser();
+        } else {
+          if (context.mounted) {
+            showSnackBar(
+              context,
+              "${userProvider.userModel?.metadata?.message}",
+              Colors.red,
+            );
+          }
+        }
+      } else {
+        if (context.mounted) {
+          showSnackBar(
+            context,
+            "Ubah foto profil dibatalkan oleh pengguna.",
+            Colors.red,
+          );
+        }
+      }
+    }
+
     void getData() async {
       final userProvider = Provider.of<UserProvider>(
         context,
@@ -202,12 +229,8 @@ class _ProfilePageState extends State<ProfilePage>
                                 child: Consumer<UserProvider>(
                                   builder: (context, userProvider, child) {
                                     return GestureDetector(
-                                      onTap: () async {
-                                        await getStoragePermission();
-                                        var result = await pickImage();
-                                        await userProvider
-                                            .changeProfilePicture(result);
-                                        await userProvider.getProfileUser();
+                                      onTap: () {
+                                        changeProfilePicture(userProvider);
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.all(4),
@@ -373,14 +396,13 @@ class _ProfilePageState extends State<ProfilePage>
               Row(
                 children: [
                   Expanded(
-                    child: Consumer<BottomNavigationBarProvider>(
-                      builder: (context, bottomNavigationBarProvider, child) {
+                    child: Consumer2<BottomNavigationBarProvider, UserProvider>(
+                      builder: (context, bottomNavigationBarProvider,
+                          userProvider, child) {
                         return CustomButtonWidget(
                           text: "Keluar",
                           color: Colors.red,
                           onPressed: () async {
-                            await storage.deleteAll();
-
                             if (context.mounted) {
                               Navigator.of(context).pushAndRemoveUntil(
                                 PageTransition(
@@ -391,8 +413,12 @@ class _ProfilePageState extends State<ProfilePage>
                               );
                             }
 
-                            await bottomNavigationBarProvider
-                                .setCurrentIndex(0);
+                            if (userProvider.isLoading == false) {
+                              await userProvider.removeUserData();
+                              await storage.deleteAll();
+                              await bottomNavigationBarProvider
+                                  .setCurrentIndex(0);
+                            }
                           },
                         );
                       },

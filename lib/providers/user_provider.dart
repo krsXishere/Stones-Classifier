@@ -17,6 +17,11 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  removeUserData() {
+    _userModel = null;
+    notifyListeners();
+  }
+
   Future<bool> getProfileUser() async {
     try {
       setLoading(true);
