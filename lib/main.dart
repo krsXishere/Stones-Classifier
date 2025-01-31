@@ -29,7 +29,7 @@ void main() async {
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
-      statusBarColor: Colors.white,
+      statusBarColor: Colors.black,
     ),
   );
 
@@ -76,6 +76,7 @@ class StoneClassifier extends StatelessWidget {
         ),
       ],
       child: Builder(builder: (context) {
+        setStatusBarColorBasedOnTheme(context);
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           home: token != null

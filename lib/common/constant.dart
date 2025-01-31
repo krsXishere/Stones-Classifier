@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -47,6 +48,21 @@ String formatTime(bool isDate, {DateTime? date}) {
 
     return formattedDate;
   }
+}
+
+void setStatusBarColorBasedOnTheme(BuildContext context) {
+  final theme = Theme.of(context);
+  final backgroundColor = white;
+  final brightness = theme.brightness;
+
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      statusBarColor: backgroundColor,
+      statusBarIconBrightness:
+          brightness == Brightness.light ? Brightness.dark : Brightness.light,
+      statusBarBrightness: brightness,
+    ),
+  );
 }
 
 const storage = FlutterSecureStorage(
