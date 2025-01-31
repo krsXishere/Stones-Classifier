@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../common/constant.dart';
 
 class CustomTextFormFieldWidget extends StatelessWidget {
@@ -31,6 +32,24 @@ class CustomTextFormFieldWidget extends StatelessWidget {
   final Function(String value)? onFieldSubmitted;
   final Widget suffixIcon;
 
+  String? _validateNumberInput(String? value) {
+    if (textInputType == TextInputType.number &&
+        value != null &&
+        value.isNotEmpty) {
+      final isNumber = double.tryParse(value) != null;
+      if (!isNumber) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          controller.text = controller.text.replaceAll(RegExp(r'[^0-9]'), '');
+          controller.selection = TextSelection.fromPosition(
+            TextPosition(offset: controller.text.length),
+          );
+        });
+        return 'Hanya angka yang diperbolehkan';
+      }
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -42,6 +61,12 @@ class CustomTextFormFieldWidget extends StatelessWidget {
       keyboardType: textInputType,
       obscureText: isObscureText,
       onFieldSubmitted: onFieldSubmitted,
+      inputFormatters: textInputType == TextInputType.number
+          ? [
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+            ]
+          : null,
+      validator: _validateNumberInput,
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: primaryTextStyle.copyWith(

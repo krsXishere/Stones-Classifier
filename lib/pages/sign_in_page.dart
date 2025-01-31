@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:stones_classifier/common/constant.dart';
+import 'package:stones_classifier/pages/request_otp_page.dart';
 import 'package:stones_classifier/providers/authentication_provider.dart';
 import 'package:stones_classifier/widgets/bottom_navigation_bar_widget.dart';
 import 'package:stones_classifier/widgets/custom_button_widget.dart';
@@ -277,9 +278,19 @@ class _SignInPageState extends State<SignInPage> {
                       SizedBox(
                         height: defaultPadding,
                       ),
-                      Text(
-                        "Lupa kata sandi?",
-                        style: secondaryTextStyle,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            PageTransition(
+                              child: const RequestOtpPage(),
+                              type: PageTransitionType.rightToLeft,
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "Lupa kata sandi?",
+                          style: secondaryTextStyle,
+                        ),
                       ),
                     ],
                   ),

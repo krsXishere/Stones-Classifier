@@ -12,6 +12,8 @@ class AuthenticationProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   bool _isObscureText = true;
   bool get isObscureText => _isObscureText;
+  bool _isObscureTextConfirm = true;
+  bool get isObscureTextConfirm => _isObscureTextConfirm;
 
   setLoading(bool value) {
     _isLoading = value;
@@ -20,6 +22,11 @@ class AuthenticationProvider with ChangeNotifier {
 
   setObscureText() {
     _isObscureText = !_isObscureText;
+    notifyListeners();
+  }
+  
+  setObscureTextConfirm() {
+    _isObscureTextConfirm = !_isObscureTextConfirm;
     notifyListeners();
   }
 
