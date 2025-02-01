@@ -7,12 +7,18 @@ import 'package:intl/intl.dart';
 double defaultPadding = 20;
 double defaultBorderRadius = 15;
 
-String apiUrl() {
-  return "http://192.168.1.4:5050";
+String baseUrl() {
+  return "http://138.91.164.57:5050";
+  // return "http://192.168.87.227:5050";
+}
+
+String baseImageUrl() {
+  return "http://138.91.164.57";
+  // return "http://192.168.87.227:5050";
 }
 
 String baseApiUrl() {
-  return "${apiUrl()}/api";
+  return "${baseUrl()}/api";
 }
 // String baseAPIURL() {
 //   return "https://pengaduan-masyarakat.byraq-tech.com/api";

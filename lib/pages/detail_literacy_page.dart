@@ -92,7 +92,7 @@ class DetailLiteracyPage extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(
                                       defaultBorderRadius),
                                   child: Image.network(
-                                    "${literacyProvider.literacy?.data?.image}",
+                                    "${baseImageUrl()}${literacyProvider.literacy?.data?.image}",
                                     fit: BoxFit.cover,
                                   ),
                                 )
