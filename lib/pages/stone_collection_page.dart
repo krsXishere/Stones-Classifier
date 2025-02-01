@@ -119,7 +119,7 @@ class StoneCollectionPage extends StatelessWidget {
                           collectionProvider,
                           collection.id ?? 0,
                           collection.stoneClassModel?.stoneClass ?? "",
-                          collection.image ?? "",
+                          "${baseImageUrl()}${collection.image}",
                         );
                       },
                       child: Container(
@@ -146,7 +146,7 @@ class StoneCollectionPage extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(
                                           defaultBorderRadius),
                                       child: Image.network(
-                                        "${collection.image}",
+                                        "${baseImageUrl()}${collection.image}",
                                         fit: BoxFit.cover,
                                       ),
                                     )

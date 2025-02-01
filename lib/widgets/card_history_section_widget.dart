@@ -55,7 +55,7 @@ class CardHistorySectionWidget extends StatelessWidget {
                                     top: Radius.circular(defaultBorderRadius),
                                   ),
                                   child: Image.network(
-                                    "${histories?[0].image}",
+                                    "${baseImageUrl()}${histories?[0].image}",
                                     fit: BoxFit.cover,
                                   ),
                                 )
@@ -96,7 +96,7 @@ class CardHistorySectionWidget extends StatelessWidget {
                                     top: Radius.circular(defaultBorderRadius),
                                   ),
                                   child: Image.network(
-                                    "${histories?[1].image}",
+                                    "${baseImageUrl()}${histories?[1].image}",
                                     fit: BoxFit.cover,
                                   ),
                                 )
@@ -137,7 +137,7 @@ class CardHistorySectionWidget extends StatelessWidget {
                                     top: Radius.circular(defaultBorderRadius),
                                   ),
                                   child: Image.network(
-                                    "${histories?[2].image}",
+                                    "${baseImageUrl()}${histories?[2].image}",
                                     fit: BoxFit.cover,
                                   ),
                                 )

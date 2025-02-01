@@ -60,7 +60,7 @@ class ListTileLiteracySectionWidget extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(
                                         defaultBorderRadius),
                                     child: Image.network(
-                                      "${literacy?.image}",
+                                      "${baseImageUrl()}${literacy?.image}",
                                       fit: BoxFit.cover,
                                     ),
                                   )

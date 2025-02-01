@@ -214,7 +214,11 @@ class _ProfilePageState extends State<ProfilePage>
                                         borderRadius: BorderRadius.circular(
                                             defaultBorderRadius),
                                         child: Image.network(
-                                          "${userProvider.userModel?.data?.practitioner?.profilePicture}",
+                                          userProvider.userModel?.data
+                                                  ?.practitioner?.profilePicture
+                                                  .contains("google")
+                                              ? "${userProvider.userModel?.data?.practitioner?.profilePicture}"
+                                              : "${baseImageUrl()}${userProvider.userModel?.data?.practitioner?.profilePicture}",
                                           fit: BoxFit.cover,
                                         ),
                                       )

@@ -125,7 +125,7 @@ class StoneHistoryPage extends StatelessWidget {
                           history.id ?? 0,
                           history.isCollected ?? 0,
                           history.stoneClassModel?.stoneClass ?? "",
-                          "${history.image}",
+                          "${baseImageUrl()}${history.image}",
                         );
                       },
                       child: Container(
@@ -152,7 +152,7 @@ class StoneHistoryPage extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(
                                           defaultBorderRadius),
                                       child: Image.network(
-                                        "${history.image}",
+                                        "${baseImageUrl()}${history.image}",
                                         fit: BoxFit.cover,
                                       ),
                                     )
